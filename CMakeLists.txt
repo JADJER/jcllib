@@ -7,6 +7,7 @@ conan_basic_setup(TARGETS)
 include_directories(include)
 
 add_subdirectory(src)
+add_subdirectory(test)
 
 install(DIRECTORY include/
         DESTINATION include)
@@ -16,3 +17,7 @@ install(TARGETS ${PROJECT_NAME}
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin)
+
+if (TEST_ENABLE)
+
+endif ()

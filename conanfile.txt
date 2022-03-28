@@ -1,5 +1,7 @@
 [requires]
 dbus/1.12.20
+catch2/2.13.8
+doxygen/1.9.2
 
 [generators]
 cmake

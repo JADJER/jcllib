@@ -15,62 +15,61 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Install Conan
-      id: install_conan
-      uses: turtlebrowser/get-conan@main
+      - name: Install Conan
+        id: install_conan
+        uses: turtlebrowser/get-conan@main
 
-    - name: Install requires through Conan
-      id: install_req
-      run: conan install ${{github.workspace}} -if ${{github.workspace}}/build --build=missing
+      - name: Install requires through Conan
+        id: install_req
+        run: conan install ${{github.workspace}} -if ${{github.workspace}}/build --build=missing
 
-    - name: Configure CMake
-      id: configure_cmake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Configure CMake
+        id: configure_cmake
+        # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+        # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
-    - name: Build
-      id: build
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      - name: Build
+        id: build
+        # Build your program with the given configuration
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
-      id: test
-      working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.  
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{env.BUILD_TYPE}}
-      
-    - name: Install
-      id: install
-      run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --prefix instdir
+      - name: Test
+        id: test
+        working-directory: ${{github.workspace}}/build
+        # Execute tests defined by the CMake configuration.
+        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+        run: ctest -C ${{env.BUILD_TYPE}}
 
-    - name: Pack
-      id: pack
-      working-directory: ${{github.workspace}}/instdir
-      run: zip -r jcllib *
+      - name: Install
+        id: install
+        run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --prefix instdir
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
+      - name: Pack
+        id: pack
         working-directory: ${{github.workspace}}/instdir
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./jcllib.zip
-        asset_name: jcllib.zip
-        asset_content_type: application/zip
+        run: zip -r jcllib *
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/jcllib.zip
+          asset_name: jcllib.zip
+          asset_content_type: application/zip

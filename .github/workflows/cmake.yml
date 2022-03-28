@@ -43,7 +43,7 @@ jobs:
       run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --prefix instdir
 
     - name: Pack
-      run: tar cfJ jcllib.tar.xz -C ${{github.workspace}}/build/instdir .
+      run: tar cfJ jcllib.tar.xz -C ${{github.workspace}}/instdir .
 
 #     - name: Upload
 #       uses: actions/upload-artifact@v1

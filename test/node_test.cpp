@@ -3,25 +3,33 @@
 //
 
 #include <catch2/catch.hpp>
+#include <jcllib/Node.hpp>
 
-SCENARIO( "vector can be sized and resized" ) {
-  GIVEN( "An empty vector" ) {
-    auto v = std::vector<std::string>{};
+SCENARIO("Test Node object's constructor") {
+  GIVEN("An node's object") {
+    auto node = std::make_unique<jcl::Node>("Test", "test");
 
-    // Validate assumption of the GIVEN clause
-    THEN( "The size and capacity start at 0" ) {
-      REQUIRE( v.size() == 0 );
-      REQUIRE( v.capacity() == 0 );
+    THEN("The object created") {
+      REQUIRE(node != nullptr);
+      REQUIRE(node->getName() == "Test");
+      REQUIRE(node->getNamespace() == "test");
     }
 
-    // Validate one use case for the GIVEN object
-    WHEN( "push_back() is called" ) {
-      v.push_back("hullo");
+//    WHEN("push_back() is called") {
+//      v.push_back("hullo");
+//
+//      THEN("The size changes") {
+//        REQUIRE(v.size() == 1);
+//        REQUIRE(v.capacity() >= 1);
+//      }
+//    }
+  }
+}
 
-      THEN( "The size changes" ) {
-        REQUIRE( v.size() == 1 );
-        REQUIRE( v.capacity() >= 1 );
-      }
-    }
+SCENARIO("Test service") {
+  GIVEN("Node") {
+    auto node = std::make_unique<jcl::Node>("Test", "test");
+
+
   }
 }

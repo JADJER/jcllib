@@ -4,10 +4,11 @@ project(jcllib)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
+include(CTest)
 include_directories(include)
 
 add_subdirectory(src)
-add_subdirectory(test)
+add_subdirectory(example)
 
 install(DIRECTORY include/
         DESTINATION include)
@@ -18,6 +19,6 @@ install(TARGETS ${PROJECT_NAME}
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin)
 
-if (TEST_ENABLE)
-
+if(CMAKE_TESTING_ENABLED)
+    add_subdirectory(test)
 endif ()

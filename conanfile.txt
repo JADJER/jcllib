@@ -1,5 +1,8 @@
 [requires]
 dbus/1.12.20
+logger/0.1
+
+[build_requires]
 catch2/2.13.8
 doxygen/1.9.2
 
